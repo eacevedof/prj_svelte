@@ -1,4 +1,4 @@
 <script>
-import Tools from "./components/Tools.svelte"
+import Tools from "./components/tools.svelte"
 </script>
 <Tools />
