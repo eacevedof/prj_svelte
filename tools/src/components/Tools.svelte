@@ -1,4 +1,4 @@
-<main>
+<main class="container">
 	<h1>My tools</h1>
   <div>
     <h3>Domains:</h3>
@@ -8,15 +8,23 @@
       {/each}
     </select>
   </div>
-  <form on:submit|preventDefault={handleSubmit}>
-    <label>renew password for:</label>
-    <input type="text" id="txt-word" value={word}/><br/><br/>
-    <button type="submit">submit</button>
+
+  {#if seldom=="" }
+  <form on:submit|preventDefault={handleSubmit} class="row">
+    <div class="mb-3">
+      <label class="form-label">renew password for:</label>
+      <input type="text" class="form-control " value={word}/>
+    </div>
+    <div class="mb-12">
+      <button type="submit" class="btn btn-primary mb-3">submit</button>
+    </div>
   </form>
+  {/if}
+  
   <hr/>
   <form action="https://upload.theframework.es/security/login" method="post">
     <input type="text" name="user" id="txt-user" value="uploader"/><br/><br/>
-    <input type="text" name="password" id="txt-password" value="++IUpload@10M++" /><br/><br/>
+    <input type="text" name="password" id="txt-password" value="" /><br/><br/>
     <button type="submit">submit</button>
   </form>
   <hr/>
@@ -46,6 +54,8 @@ let ardomains = [
 let seldomain = ""
 let seldom = ""
 
+$: seldomain
+$: seldom
 
 //methods
 const handleSubmit = evt => {
