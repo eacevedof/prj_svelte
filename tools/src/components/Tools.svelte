@@ -1,8 +1,16 @@
 <main>
 	<h1>My tools</h1>
-  <form on:submit|preventDefault={handleSubmit} action="https://upload.theframework.es/security/get-password" method="post">
+  <div>
+    <h3>Domains:</h3>
+    <select value={seldomain} on:change="{() => seldom = "" }">
+      {#each ardomains as obj}
+        <option value={obj.value}>{obj.text}</option>
+      {/each}
+    </select>
+  </div>
+  <form on:submit|preventDefault={handleSubmit}>
     <label>renew password for:</label>
-    <input type="text" name="word" id="txt-word" value={word}/><br/><br/>
+    <input type="text" id="txt-word" value={word}/><br/><br/>
     <button type="submit">submit</button>
   </form>
   <hr/>
@@ -27,10 +35,57 @@
 </main>
 
 <script>
+//props
 let word = "menganito"
-const handleSubmit = (e)=>{
-  console.log("handleSubmit.e",e)
-}
+let ardomains = [
+  {value:"",text:""},
+  {value:"https://upload.theframework.es/security/get-password",text:"Upload / get-password"},
+  {value:"https://upload.theframework.es/security/login",text:"Upload / login"},
+  {value:"https://upload.theframework.es/upload",text:"Upload / files"},
+]
+let seldomain = ""
+let seldom = ""
+
+
+//methods
+const handleSubmit = evt => {
+  console.log("handleSubmit.evt",evt)
+
+  const url = "https://upload.theframework.es/security/get-password"
+  const data = new FormData()
+  data.append("word",word)  
+
+  fetch(url, {
+    method: 'post',
+    body: data
+  })
+  .then(response => response.json())
+  .then(response => {
+    console.log("reponse",response)
+    if(response.title == "success"){
+      Swal.fire({
+        icon: 'success',
+        title: 'Enhorabuena! <br/> Subscripción realizada correctamente',
+        html: response.description
+      })
+    } 
+    else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Esta acción no se ha podido completar',
+        text: response.description,
+      })
+    }
+  })
+  .catch(error => {
+    console.log("error catched:",error)
+    Swal.fire({
+        icon: 'error',
+        title: 'Vaya! Ha ocurrido un error',
+        text: error.toString(),
+    })
+  })
+}// handleSubmit
 </script>
 
 <style>
