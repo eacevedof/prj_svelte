@@ -42,7 +42,7 @@
   </form>
   {/if}
 
-  {#if seldomain.includes("/upload")}
+  {#if seldomain.includes("es/upload")}
   <h3>Test upload</h3>
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
@@ -66,20 +66,17 @@
     </div>
   </form>
   {/if}
+  <div class="row">
+    <h3>Resume</h3>
+    <ul>
+      <li><b>User:</b><span>{resume.hashit.user}</span></li>
+      <li><b>Word:</b><span>{resume.hashit.word}</span></li>
+      <li><b>Hashed:</b><span>{resume.hashit.hashed}</span></li>
 
-  <form action="https://upload.theframework.es/upload" method="post" enctype="multipart/form-data">
-    <h1>Upload in localhost:4000/upload</h1>
-    <label>One</label>
-    <input type="file" name="fil-one" id="fil-one"/><br/><br/>
-    <label>Two</label>
-    <input type="file" name="fil-two" id="fil-two"/><br/><br/>
-
-    <input type="text" name="folderdomain" value="tinymarket.es">
-    <input type="text" name="resource-usertoken" id="txt-resource-usertoken"
-          value="WU5pU2Q1WTNrUm1Qa1puMUg1NUYvbCtvcEYvMzZ4RGJHUlFKYW9mUlNhUDc5SVJIMC9TL20zM1BwaWNMKy9rNlJQSVA4RXV4WnJlNzVyTkxiRzk1OG1meFluclAvNXpTNzV3Znp6aVVVOVA5NFNYWmNpclhaZGVQcEJZbzRkNzQ="
-    /><br/><br/>
-    <button type="submit">submit</button>
-  </form>
+      <li><b>Login token:</b><span>{resume.login.token}</span></li>
+      <li><b>result:</b><span>{resume.upload.result}</span></li>
+    </ul>
+  </div>
 </main>
 
 <script>
@@ -108,8 +105,6 @@ let resume = {
     result:[]
   },
 }
-
-
 
 let ardomains = [
   {value:"",text:"...choose action"},
