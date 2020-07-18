@@ -1,5 +1,5 @@
 <main class="container">
-	<h1>My tools</h1>
+	<h1><span class="badge bg-secondary">My tools</span></h1>
   <div class="row">
     <div class="mb-3">
       <label class="form-label">Action:</label>
@@ -65,7 +65,7 @@
     </div>
   </form>
     {#if htmlurls!==""}
-      <h4>Files uploaded:</h4>
+      <h4 class="badge bg-success">Files uploaded:</h4>
       <div class="row">
         {@html htmlurls}
       </div>
@@ -128,9 +128,9 @@ $:htmlurls = ""
 
 let ardomains = [
   {value:"",text:"...choose action"},
-  {value:"https://upload.theframework.es/security/get-password",text:"Upload / get-password"},
-  {value:"https://upload.theframework.es/security/login",text:"Upload / login"},
-  {value:"https://upload.theframework.es/upload",text:"Upload / files"},
+  {value:"https://upload.theframework.es/security/get-password",text:"get-password / Hash it"},
+  {value:"https://upload.theframework.es/security/login",text:"login / Get token"},
+  {value:"https://upload.theframework.es/upload",text:"upload / Upload"},
 ]
 
 let seldomain = ""
@@ -141,11 +141,10 @@ const get_htmllinks = objurl => {
   const keys = Object.keys(objurl)
   let html = ""
   keys.forEach(key => {
-    html += `<a href="${objurl[key]}" target="_blank">${key} - ${objurl[key]}</a><br/>`
+    html += `<a href="${objurl[key]}" class="link-success" target="_blank">${key} - ${objurl[key]}</a><br/>`
   })
   return html
 }
-
 
 //methods
 const handleSubmit = evt => {
