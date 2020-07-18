@@ -42,7 +42,7 @@
   {/if}
 
   {#if seldomain.includes("es/upload")}
-  <h3>Test upload</h3>
+  <h3>Upload</h3>
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
       <label class="form-label">File one</label>
@@ -65,7 +65,7 @@
     </div>
   </form>
   {/if}
-  
+
   <div class="row">
     <h3>Resume</h3>
     <ul>
