@@ -130,8 +130,8 @@ const is_defined = mxvar => typeof(mxvar) !== "undefined"
 //methods
 const handleSubmit = evt => {
   console.log("handleSubmit.evt",evt)
-
   const url = seldomain
+
   const data = new FormData()
   data.append("word",hashit.word)
   data.append("user",login.user)
@@ -139,9 +139,10 @@ const handleSubmit = evt => {
   data.append("folderdomain",upload.folder)
   data.append("resource-usertoken",login.token)
 
-  const files = document.querySelector("input[type='file']")
-  if(files)
-    files.forEach((elem,i) => {
+  const inputfiles = document.querySelectorAll("input[type='file']")
+  console.log("inputfiles",inputfiles)
+  if(inputfiles)
+    inputfiles.forEach((elem,i) => {
       data.append("file_"+i, elem)
     })
 
@@ -154,7 +155,10 @@ const handleSubmit = evt => {
     console.log("reponse",response)
     if(response.errors.length == 0){
       if(is_defined(response.data.result)) resume.hashit.wordhashed = response.data.result
-      if(is_defined(response.data.token)) resume.login.token = response.data.token
+      if(is_defined(response.data.token)) {
+        resume.login.token = response.data.token
+        resume.upload.usertoken = response.data.token
+      }
       
     } 
     else {
