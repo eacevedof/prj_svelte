@@ -82,7 +82,8 @@
       <li><b>file-2:</b><br/><span>{resume.upload.two}</span></li>
       <li><b>Folder:</b><br/><span>{resume.upload.folder}</span></li>
       <li><b>Usertoken:</b><br/><span>{resume.upload.usertoken}</span></li>
-      <li><b>Result:</b><br/><code>{JSON.stringify(resume.upload.result)}</code></li>
+      <li><b>Result:</b><br/><code>{JSON.stringify(resume.upload.result.warning)}</code></li>
+      <li><b>Result urls:</b><br/>{get_htmllinks(resume.upload.result.url)}</li>
 
     </ul>
   </div>
@@ -106,7 +107,10 @@ let upload = {
   two: "",
   folder: "",
   usertoken: "",
-  result: {},
+  result: {
+    url: {},
+    warning:[]
+  },
 }
 
 $:resume = {
@@ -125,6 +129,16 @@ let ardomains = [
 let seldomain = ""
 
 const is_defined = mxvar => typeof(mxvar) !== "undefined"
+
+const get_htmllinks = objurl => {
+  const keys = Object.keys(objurl)
+  let html = ""
+  keys.forEach(key => {
+    html += `<a src="${objurl[key]}" target="_blank">${key} - ${objurl[key]}</a><br/>`
+  })
+  return html
+}
+
 
 //methods
 const handleSubmit = evt => {
