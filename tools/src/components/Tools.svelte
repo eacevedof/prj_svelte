@@ -105,7 +105,7 @@ let upload = {
   two: "",
   folder: "",
   usertoken: "",
-  result: [],
+  result: {},
 }
 
 
@@ -143,7 +143,9 @@ const handleSubmit = evt => {
   console.log("inputfiles",inputfiles)
   if(inputfiles)
     inputfiles.forEach((elem,i) => {
-      data.append("file_"+i, elem)
+      const file = elem.files
+      console.log("file[0]:",file[0])
+      data.append(file.name,file[0])
     })
 
   fetch(url, {
@@ -158,8 +160,16 @@ const handleSubmit = evt => {
       if(is_defined(response.data.token)) {
         resume.login.token = response.data.token
         resume.upload.usertoken = response.data.token
+        
+      }
+      if(is_defined(response.data.url)){
+        resume.upload.result.url = response.data.url
       }
       
+      if(is_defined(response.data.warning)){
+        resume.upload.result.warning = response.data.warning
+      }      
+
     } 
     else {
       Swal.fire({
