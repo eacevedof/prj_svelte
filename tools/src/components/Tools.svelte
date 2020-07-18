@@ -2,14 +2,15 @@
 	<h1>My tools</h1>
   <div>
     <h3>Domains:</h3>
-    <select value={seldomain} on:change="{() => seldom = "" }">
-      {#each ardomains as obj}
-        <option value={obj.value}>{obj.text}</option>
+    <select bind:value={seldomain}>
+      {#each ardomains as objdomain}
+        <option value={objdomain.value}>{objdomain.text}</option>
       {/each}
     </select>
   </div>
 
-  {#if seldom=="" }
+  <!-- {#if is_seldomain("/get-password")} -->
+  {#if seldomain.includes("/get-password")}
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
       <label class="form-label">renew password for:</label>
@@ -51,11 +52,15 @@ let ardomains = [
   {value:"https://upload.theframework.es/security/login",text:"Upload / login"},
   {value:"https://upload.theframework.es/upload",text:"Upload / files"},
 ]
-let seldomain = ""
-let seldom = ""
 
-$: seldomain
-$: seldom
+//$: seldomain = ""
+let seldomain = ""
+
+
+const is_seldomain = slug => {
+  console.log("slug:",slug,seldomain.includes(slug))
+  return seldomain.includes(slug)
+}
 
 //methods
 const handleSubmit = evt => {
