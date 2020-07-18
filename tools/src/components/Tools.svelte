@@ -126,7 +126,6 @@ let seldomain = ""
 
 const is_defined = mxvar => typeof(mxvar) !== "undefined"
 
-
 //methods
 const handleSubmit = evt => {
   console.log("handleSubmit.evt",evt)
@@ -160,7 +159,6 @@ const handleSubmit = evt => {
       if(is_defined(response.data.token)) {
         resume.login.token = response.data.token
         resume.upload.usertoken = response.data.token
-        
       }
       if(is_defined(response.data.url)){
         resume.upload.result.url = response.data.url
@@ -168,8 +166,7 @@ const handleSubmit = evt => {
 
       if(is_defined(response.data.warning)){
         resume.upload.result.warning = response.data.warning
-      }      
-
+      }
     } 
     else {
       Swal.fire({
