@@ -1,19 +1,22 @@
 <main class="container">
 	<h1>My tools</h1>
-  <div>
-    <h3>Domains:</h3>
-    <select bind:value={seldomain}>
-      {#each ardomains as objdomain}
-        <option value={objdomain.value}>{objdomain.text}</option>
-      {/each}
-    </select>
+  <div class="row">
+    <div class="mb-3">
+      <label class="form-label">Action:</label>
+      <select bind:value={seldomain}>
+        {#each ardomains as objdomain}
+          <option value={objdomain.value}>{objdomain.text}</option>
+        {/each}
+      </select>
+    </div>
   </div>
 
   <!-- {#if is_seldomain("/get-password")} -->
   {#if seldomain.includes("/get-password")}
+  <h3>Hash it</h3>
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
-      <label class="form-label">renew password for:</label>
+      <label class="form-label">Hash your word:</label>
       <input type="text" class="form-control " value={word}/>
     </div>
     <div class="mb-12">
@@ -22,19 +25,55 @@
   </form>
   {/if}
   
-  <hr/>
-  <form action="https://upload.theframework.es/security/login" method="post">
-    <input type="text" name="user" id="txt-user" value="uploader"/><br/><br/>
-    <input type="text" name="password" id="txt-password" value="" /><br/><br/>
-    <button type="submit">submit</button>
+  {#if seldomain.includes("/login")}
+  <h3>Get token</h3>
+  <form on:submit|preventDefault={handleSubmit} class="row">
+    <div class="mb-3">
+      <label class="form-label">User</label>
+      <input type="text" class="form-control " value={user}/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input type="text" class="form-control " value={password}/>
+    </div>    
+    <div class="mb-12">
+      <button type="submit" class="btn btn-primary mb-3">submit</button>
+    </div>
   </form>
-  <hr/>
+  {/if}
+
+  {#if seldomain.includes("/upload")}
+  <h3>Test upload</h3>
+  <form on:submit|preventDefault={handleSubmit} class="row">
+    <div class="mb-3">
+      <label class="form-label">File one</label>
+      <input type="file" class="form-control" value={file.one}/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">File two</label>
+      <input type="file" class="form-control" value={file.two}/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Folder</label>
+      <input class="form-control" value={file.folder}/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Token</label>
+      <input class="form-control" value={file.usertoken}/>
+    </div>    
+    <div class="mb-12">
+      <button type="submit" class="btn btn-primary mb-3">submit</button>
+    </div>
+  </form>
+  {/if}
+
   <form action="https://upload.theframework.es/upload" method="post" enctype="multipart/form-data">
     <h1>Upload in localhost:4000/upload</h1>
     <label>One</label>
     <input type="file" name="fil-one" id="fil-one"/><br/><br/>
     <label>Two</label>
     <input type="file" name="fil-two" id="fil-two"/><br/><br/>
+
     <input type="text" name="folderdomain" value="tinymarket.es">
     <input type="text" name="resource-usertoken" id="txt-resource-usertoken"
           value="WU5pU2Q1WTNrUm1Qa1puMUg1NUYvbCtvcEYvMzZ4RGJHUlFKYW9mUlNhUDc5SVJIMC9TL20zM1BwaWNMKy9rNlJQSVA4RXV4WnJlNzVyTkxiRzk1OG1meFluclAvNXpTNzV3Znp6aVVVOVA5NFNYWmNpclhaZGVQcEJZbzRkNzQ="
@@ -46,8 +85,34 @@
 <script>
 //props
 let word = "menganito"
+let user = ""
+let password = ""
+
+let file = {
+  one: "",
+  two: "",
+  folder: "",
+  usertoken: "",
+}
+
+let resume = {
+  hashit:{
+    user: "",
+    word: "",
+    hashed: "",
+  },
+  login:{
+    token: "",
+  },
+  upload:{
+    result:[]
+  },
+}
+
+
+
 let ardomains = [
-  {value:"",text:""},
+  {value:"",text:"...choose action"},
   {value:"https://upload.theframework.es/security/get-password",text:"Upload / get-password"},
   {value:"https://upload.theframework.es/security/login",text:"Upload / login"},
   {value:"https://upload.theframework.es/upload",text:"Upload / files"},
@@ -55,7 +120,6 @@ let ardomains = [
 
 //$: seldomain = ""
 let seldomain = ""
-
 
 const is_seldomain = slug => {
   console.log("slug:",slug,seldomain.includes(slug))
