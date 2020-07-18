@@ -64,6 +64,13 @@
       <button type="submit" class="btn btn-primary mb-3">submit</button>
     </div>
   </form>
+    {#if htmlurls!==""}
+      <h4>Files uploaded:</h4>
+      <div class="row">
+        {@html htmlurls}
+      </div>
+      <br/>
+    {/if}
   {/if}
 
   <div class="row">
@@ -83,8 +90,6 @@
       <li><b>Folder:</b><br/><span>{resume.upload.folder}</span></li>
       <li><b>Usertoken:</b><br/><span>{resume.upload.usertoken}</span></li>
       <li><b>Result:</b><br/><code>{JSON.stringify(resume.upload.result.warning)}</code></li>
-      <li><b>Result urls:</b><br/>{@html htmlurls}</li>
-
     </ul>
   </div>
 </main>
