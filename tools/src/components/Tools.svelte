@@ -81,7 +81,7 @@
       <li><b>file-2:</b><br/><span>{resume.upload.two}</span></li>
       <li><b>Folder:</b><br/><span>{resume.upload.folder}</span></li>
       <li><b>Usertoken:</b><br/><span>{resume.upload.usertoken}</span></li>
-      <li><b>Result:</b><br/><span>{JSON.stringify(resume.upload.result)}</span></li>
+      <li><b>Result:</b><br/><code>{JSON.stringify(resume.upload.result)}</code></li>
 
     </ul>
   </div>
@@ -145,7 +145,7 @@ const handleSubmit = evt => {
     inputfiles.forEach((elem,i) => {
       const file = elem.files
       console.log("file[0]:",file[0])
-      data.append(file.name,file[0])
+      data.append("file_"+i,file[0])
     })
 
   fetch(url, {
@@ -165,7 +165,7 @@ const handleSubmit = evt => {
       if(is_defined(response.data.url)){
         resume.upload.result.url = response.data.url
       }
-      
+
       if(is_defined(response.data.warning)){
         resume.upload.result.warning = response.data.warning
       }      
