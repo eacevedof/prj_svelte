@@ -167,6 +167,14 @@ const handleSubmit = evt => {
       if(is_defined(response.data.warning)){
         resume.upload.result.warning = response.data.warning
       }
+
+      if(seldomain.includes("es/upload")){
+        Swal.fire({
+          icon: 'success',
+          title: 'Upload finished',
+          text: JSON.stringify(resume.upload.result.url),
+        })        
+      }
     } 
     else {
       Swal.fire({
