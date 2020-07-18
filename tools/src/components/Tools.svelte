@@ -193,7 +193,6 @@ const handleSubmit = evt => {
         Swal.fire({
           icon: 'success',
           title: 'Upload finished',
-          text: JSON.stringify(resume.upload.result.url),
         })
       }
     } 
