@@ -83,7 +83,7 @@
       <li><b>Folder:</b><br/><span>{resume.upload.folder}</span></li>
       <li><b>Usertoken:</b><br/><span>{resume.upload.usertoken}</span></li>
       <li><b>Result:</b><br/><code>{JSON.stringify(resume.upload.result.warning)}</code></li>
-      <li><b>Result urls:</b><br/>{get_htmllinks(resume.upload.result.url)}</li>
+      <li><b>Result urls:</b><br/>{@html htmlurls}</li>
 
     </ul>
   </div>
@@ -119,6 +119,8 @@ $:resume = {
   upload
 }
 
+$:htmlurls = ""
+
 let ardomains = [
   {value:"",text:"...choose action"},
   {value:"https://upload.theframework.es/security/get-password",text:"Upload / get-password"},
@@ -134,7 +136,7 @@ const get_htmllinks = objurl => {
   const keys = Object.keys(objurl)
   let html = ""
   keys.forEach(key => {
-    html += `<a src="${objurl[key]}" target="_blank">${key} - ${objurl[key]}</a><br/>`
+    html += `<a href="${objurl[key]}" target="_blank">${key} - ${objurl[key]}</a><br/>`
   })
   return html
 }
@@ -176,6 +178,7 @@ const handleSubmit = evt => {
       }
       if(is_defined(response.data.url)){
         resume.upload.result.url = response.data.url
+        htmlurls = get_htmllinks(resume.upload.result.url)
       }
 
       if(is_defined(response.data.warning)){
@@ -187,7 +190,7 @@ const handleSubmit = evt => {
           icon: 'success',
           title: 'Upload finished',
           text: JSON.stringify(resume.upload.result.url),
-        })        
+        })
       }
     } 
     else {
