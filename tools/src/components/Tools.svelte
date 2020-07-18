@@ -16,7 +16,7 @@
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
       <label class="form-label">Word to be hashed:</label>
-      <input type="text" class="form-control " bind:value={word}/>
+      <input type="text" class="form-control " bind:value={hashit.word}/>
     </div>
     <div class="mb-12">
       <button type="submit" class="btn btn-primary mb-3">submit</button>
@@ -29,11 +29,11 @@
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
       <label class="form-label">User</label>
-      <input type="text" class="form-control " bind:value={user}/>
+      <input type="text" class="form-control " bind:value={login.user}/>
     </div>
     <div class="mb-3">
       <label class="form-label">Password</label>
-      <input type="text" class="form-control " bind:value={password}/>
+      <input type="text" class="form-control " bind:value={login.password}/>
     </div>    
     <div class="mb-12">
       <button type="submit" class="btn btn-primary mb-3">submit</button>
@@ -46,19 +46,19 @@
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
       <label class="form-label">File one</label>
-      <input type="file" class="form-control" bind:value={file.one}/>
+      <input type="file" class="form-control" bind:value={upload.one}/>
     </div>
     <div class="mb-3">
       <label class="form-label">File two</label>
-      <input type="file" class="form-control" bind:value={file.two}/>
+      <input type="file" class="form-control" bind:value={upload.two}/>
     </div>
     <div class="mb-3">
       <label class="form-label">Folder</label>
-      <input class="form-control" bind:value={file.folder}/>
+      <input class="form-control" bind:value={upload.folder}/>
     </div>
     <div class="mb-3">
       <label class="form-label">Token</label>
-      <input class="form-control" bind:value={file.usertoken}/>
+      <input class="form-control" bind:value={upload.usertoken}/>
     </div>    
     <div class="mb-12">
       <button type="submit" class="btn btn-primary mb-3">submit</button>
@@ -68,41 +68,51 @@
   <div class="row">
     <h3>Resume</h3>
     <ul>
-      <li><b>User:</b><span>{resume.hashit.user}</span></li>
-      <li><b>Word:</b><span>{resume.hashit.word}</span></li>
-      <li><b>Hashed:</b><span>{resume.hashit.hashed}</span></li>
+      <li><b>Word:</b><br/><span>{resume.hashit.word}</span></li>
+      <li><b>Hashed:</b><br/><span>{resume.hashit.wordhashed}</span></li>
+      
+      <br/>
+      <li><b>User:</b><br/><span>{resume.login.user}</span></li>
+      <li><b>Password:</b><br/><span>{resume.login.password}</span></li>
+      <li><b>Login token:</b><br/><span>{resume.login.token}</span></li>
+      
+      <br/>
+      <li><b>file-1:</b><br/><span>{resume.upload.one}</span></li>
+      <li><b>file-2:</b><br/><span>{resume.upload.two}</span></li>
+      <li><b>Folder:</b><br/><span>{resume.upload.folder}</span></li>
+      <li><b>Usertoken:</b><br/><span>{resume.upload.usertoken}</span></li>
+      <li><b>Result:</b><br/><span>{JSON.stringify(resume.upload.result)}</span></li>
 
-      <li><b>Login token:</b><span>{resume.login.token}</span></li>
-      <li><b>result:</b><span>{resume.upload.result}</span></li>
     </ul>
   </div>
 </main>
 
 <script>
 //props
-let word = "some-pwd"
-let user = ""
-let password = ""
+let hashit = {
+  word: "",
+  wordhashed: ""
+}
 
-let file = {
+let login = {
+  user: "",
+  password: "",
+  token:""
+}
+
+let upload = {
   one: "",
   two: "",
   folder: "",
   usertoken: "",
+  result: [],
 }
 
+
 $:resume = {
-  hashit:{
-    user: user,
-    word: word,
-    hashed: "",
-  },
-  login:{
-    token: "",
-  },
-  upload:{
-    result:[]
-  },
+  hashit,
+  login,
+  upload
 }
 
 let ardomains = [
@@ -112,21 +122,28 @@ let ardomains = [
   {value:"https://upload.theframework.es/upload",text:"Upload / files"},
 ]
 
-//$: seldomain = ""
 let seldomain = ""
 
-const is_seldomain = slug => {
-  console.log("slug:",slug,seldomain.includes(slug))
-  return seldomain.includes(slug)
-}
+const is_defined = mxvar => typeof(mxvar) !== "undefined"
+
 
 //methods
 const handleSubmit = evt => {
   console.log("handleSubmit.evt",evt)
 
-  const url = "https://upload.theframework.es/security/get-password"
+  const url = seldomain
   const data = new FormData()
-  data.append("word",word)  
+  data.append("word",hashit.word)
+  data.append("user",login.user)
+  data.append("password",login.password)
+  data.append("folderdomain",upload.folder)
+  data.append("resource-usertoken",login.token)
+
+  const files = document.querySelector("input[type='file']")
+  if(files)
+    files.forEach((elem,i) => {
+      data.append("file_"+i, elem)
+    })
 
   fetch(url, {
     method: 'post',
@@ -136,7 +153,9 @@ const handleSubmit = evt => {
   .then(response => {
     console.log("reponse",response)
     if(response.errors.length == 0){
-      resume.hashit.hashed = response.data.result
+      if(is_defined(response.data.result)) resume.hashit.wordhashed = response.data.result
+      if(is_defined(response.data.token)) resume.login.token = response.data.token
+      
     } 
     else {
       Swal.fire({
