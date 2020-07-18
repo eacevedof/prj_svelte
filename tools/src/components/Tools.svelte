@@ -65,6 +65,7 @@
     </div>
   </form>
   {/if}
+  
   <div class="row">
     <h3>Resume</h3>
     <ul>
@@ -107,7 +108,6 @@ let upload = {
   usertoken: "",
   result: {},
 }
-
 
 $:resume = {
   hashit,
