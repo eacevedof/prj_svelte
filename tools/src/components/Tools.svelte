@@ -136,7 +136,7 @@ const handleSubmit = evt => {
   data.append("user",login.user)
   data.append("password",login.password)
   data.append("folderdomain",upload.folder)
-  data.append("resource-usertoken",login.token)
+  data.append("resource-usertoken",upload.usertoken)
 
   const inputfiles = document.querySelectorAll("input[type='file']")
   console.log("inputfiles",inputfiles)
