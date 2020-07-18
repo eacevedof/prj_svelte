@@ -11,13 +11,12 @@
     </div>
   </div>
 
-  <!-- {#if is_seldomain("/get-password")} -->
   {#if seldomain.includes("/get-password")}
   <h3>Hash it</h3>
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
-      <label class="form-label">Hash your word:</label>
-      <input type="text" class="form-control " value={word}/>
+      <label class="form-label">Word to be hashed:</label>
+      <input type="text" class="form-control " bind:value={word}/>
     </div>
     <div class="mb-12">
       <button type="submit" class="btn btn-primary mb-3">submit</button>
@@ -30,11 +29,11 @@
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
       <label class="form-label">User</label>
-      <input type="text" class="form-control " value={user}/>
+      <input type="text" class="form-control " bind:value={user}/>
     </div>
     <div class="mb-3">
       <label class="form-label">Password</label>
-      <input type="text" class="form-control " value={password}/>
+      <input type="text" class="form-control " bind:value={password}/>
     </div>    
     <div class="mb-12">
       <button type="submit" class="btn btn-primary mb-3">submit</button>
@@ -47,19 +46,19 @@
   <form on:submit|preventDefault={handleSubmit} class="row">
     <div class="mb-3">
       <label class="form-label">File one</label>
-      <input type="file" class="form-control" value={file.one}/>
+      <input type="file" class="form-control" bind:value={file.one}/>
     </div>
     <div class="mb-3">
       <label class="form-label">File two</label>
-      <input type="file" class="form-control" value={file.two}/>
+      <input type="file" class="form-control" bind:value={file.two}/>
     </div>
     <div class="mb-3">
       <label class="form-label">Folder</label>
-      <input class="form-control" value={file.folder}/>
+      <input class="form-control" bind:value={file.folder}/>
     </div>
     <div class="mb-3">
       <label class="form-label">Token</label>
-      <input class="form-control" value={file.usertoken}/>
+      <input class="form-control" bind:value={file.usertoken}/>
     </div>    
     <div class="mb-12">
       <button type="submit" class="btn btn-primary mb-3">submit</button>
@@ -81,7 +80,7 @@
 
 <script>
 //props
-let word = "menganito"
+let word = "some-pwd"
 let user = ""
 let password = ""
 
@@ -92,10 +91,10 @@ let file = {
   usertoken: "",
 }
 
-let resume = {
+$:resume = {
   hashit:{
-    user: "",
-    word: "",
+    user: user,
+    word: word,
     hashed: "",
   },
   login:{
@@ -136,18 +135,14 @@ const handleSubmit = evt => {
   .then(response => response.json())
   .then(response => {
     console.log("reponse",response)
-    if(response.title == "success"){
-      Swal.fire({
-        icon: 'success',
-        title: 'Enhorabuena! <br/> Subscripción realizada correctamente',
-        html: response.description
-      })
+    if(response.errors.length == 0){
+      resume.hashit.hashed = response.data.result
     } 
     else {
       Swal.fire({
         icon: 'warning',
         title: 'Esta acción no se ha podido completar',
-        text: response.description,
+        text: JSON.stringify(response.errors),
       })
     }
   })
